@@ -1,1 +1,2 @@
-# ECG__deteccao_de_picos_R_e_variabilidade___PDS
+# ECG: detecção de picos R e variabilidade
+## Este projeto faz parte da entrega do projeto final da matéria de Processamento Digital de Sinais no segundo semestre de 2025.
