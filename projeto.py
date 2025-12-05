@@ -1,8 +1,8 @@
 import wfdb                                 # Biblioteca especializada para ler dados do PhysioNet, base de dados que foi coletada as ECGs (MIT-BIH)
-import numpy as np
+import numpy
 import matplotlib.pyplot as plt
 from scipy.signal import butter, filtfilt   # bibliotecas de filtragem  
-import neurokit2 as nk                      # Biblioteca para detecção de picos R e análise de VFC/HRV
+import neurokit2                            # Biblioteca para detecção de picos R e análise de VFC/HRV
 
 #Objetivo
 #identificar automaticamente os picos R (deflexões mais proeminentes do complexo QRS) 
@@ -24,19 +24,19 @@ import neurokit2 as nk                      # Biblioteca para detecção de pico
 # ------------------------ RECEBER AS INFORMAÇÕES DO BANCO DE DADOS ---------------------------------
 taxa_amostragem = 360   # amostragem padrão do banco de dados
 canal = 0               # banco de dados foi dividido em dois canais, um deles foi escolhido
-registro_ID = '100'     # são 48 registros, escolhido o primeiro
+registro_ID = '101'     # são 48 registros, escolhido o primeiro
 
 record = wfdb.rdrecord(registro_ID, pn_dir= 'mitdb')
 sinal_bruto = record.p_signal[:, canal]
 fs = record.fs
-
+'''
 plt.figure(figsize=(12, 4))
-plt.plot(np.arange(len(sinal_bruto)) / fs, sinal_bruto)
+plt.plot(numpy.arange(len(sinal_bruto)) / fs, sinal_bruto)
 plt.title(f'Sinal ECG Bruto (Registro {registro_ID})')
 plt.xlabel('Tempo (s)')
 plt.ylabel('Amplitude (mV)')
 plt.show()
-
+'''
 # -------------------------------- PRÉ PROCESSAMENTO --------------------------------------------------
 #filtragem passa-banda (0,5Hz a 40Hz) para eliminar ruídos de baixa frequencia e interferência de rede elétrica (50/60Hz)
 freq_baixa = 0.5
@@ -55,13 +55,29 @@ b, a = butter(ordem_filtro, Wn, btype='bandpass')
 # Aplicar o filtro 
 # filtfilt para aplicar o filtro na direção direta e reversa e, assim, cancelar o deslocamento de fase gerado pelo filtro digital
 sinal_filtrado = filtfilt(b, a, sinal_bruto)
-
+'''
 plt.figure(figsize=(12, 4))
-plt.plot(np.arange(len(sinal_bruto)) / fs, sinal_bruto, label='Bruto', alpha=0.5)
-plt.plot(np.arange(len(sinal_filtrado)) / fs, sinal_filtrado, label='Filtrado')
+plt.plot(numpy.arange(len(sinal_bruto)) / fs, sinal_bruto, label='Bruto', alpha=0.5)
+plt.plot(numpy.arange(len(sinal_filtrado)) / fs, sinal_filtrado, label='Filtrado')
 plt.title('Comparação: Sinal Bruto vs. Sinal Filtrado (Passa-Banda)')
 plt.xlabel('Tempo (s)')
 plt.ylabel('Amplitude (mV)')
 plt.xlim(0, 5) # Zoom nos primeiros 5 segundos para melhor visualização
 plt.legend()
+plt.show()
+'''
+# ------------------------------------ DETECÇÃO DOS PICOS R -------------------------------------------
+# método de detectar os picos R foi escolhido o padrão emrich2023 
+# foi o mais preciso a partir dos dados inseridos e é mais recente que o Pan-Tompkins
+# baseado no detector de Koka, transforma o ECG em representação gráfica e extrai as posições exatas usando grafos
+_, info = neurokit2.ecg_peaks(sinal_filtrado, sampling_rate=fs, method='emrich2023')
+picosR = info["ECG_R_Peaks"]
+
+plt.figure(figsize=(12, 4))
+plt.plot(numpy.arange(len(sinal_filtrado)) / fs, sinal_filtrado)
+plt.plot(picosR / fs, sinal_filtrado[picosR], "o", color='red', markersize=5)
+plt.title('Sinal ECG Filtrado com Picos R Detectados')
+plt.xlabel('Tempo (s)')
+plt.ylabel('Amplitude (mV)')
+plt.xlim(0, 20)
 plt.show()
