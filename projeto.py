@@ -74,6 +74,7 @@ plt.show()
 # baseado no detector de Koka, transforma o ECG em representação gráfica e extrai as posições exatas usando grafos
 _, info = neurokit2.ecg_peaks(sinal_filtrado, sampling_rate=fs, method='emrich2023')
 picosR = info["ECG_R_Peaks"]
+
 '''
 plt.figure(figsize=(12, 4))
 plt.plot(numpy.arange(len(sinal_filtrado)) / fs, sinal_filtrado)
@@ -84,29 +85,47 @@ plt.ylabel('Amplitude (mV)')
 plt.xlim(0, 20)
 plt.show()
 '''
+# ------------------ FILTRAR ARTEFATOS DO INTERVALO, RETIRAR RR FORA DE UM LIMIAR -----------------------
+
 #--------------------------------- VARIABILIDADE DA FREQUENCIA CARDIACA ---------------------------------
-
-#diferencas entre amostras e converter em milissegundos 
+# diferencas entre amostras para cálculo de intervalos RR
 diferencas = numpy.diff(picosR)
-intervalosRR = diferencas/fs
-FC_instantanea = 60/intervalosRR
+intervalosRR_FC = diferencas/fs             # intervalos RR em segundos para FC
+intervalosRR_hist = intervalosRR_FC * 1000  # intervalos RR em milissegundos para histograma
 
-# calculo da frequencia cardiaca instantanea
-taxa_instantanea = neurokit2.ecg_rate(picosR, sampling_rate=fs, desired_length=len(sinal_filtrado))
+# cálculo da frequencia cardíaca instantânea
+FC_instantanea = 60/intervalosRR_FC
 
-# Isso permite que a frequência instantânea seja alinhada ao sinal de ECG.
-ecg_processado, info_processado = neurokit2.ecg_process(sinal_filtrado, sampling_rate=fs)
+# média e desvio padrão dos intervalos RR
+mediaRR = numpy.mean(intervalosRR_hist)
+desvioRR = numpy.std(intervalosRR_hist)
 
-# A função nk.hrv calcula todas as métricas necessárias:
-hrv_metrics = neurokit2.hrv(picosR, sampling_rate=fs)
+#média de batimentos por minuto (BPM)
+mediaBPM = numpy.mean(FC_instantanea)
 
-# Extrair o BPM Médio
-bpm_medio = hrv_metrics['HRV_MeanHR'][0]
+print("\n--- Tabela de Resumo dos Intervalos RR ---")
+print(f"Média dos Intervalos RR: {mediaRR:.2f} ms")
+print(f"Desvio Padrão dos Intervalos RR (SDNN): {desvioRR:.2f} ms")
+print(f"Frequência Cardíaca Média (BPM): {mediaBPM:.2f} BPM")
 
-print("\n--- Resultados de Ritmo Cardíaco e Variabilidade (HRV) ---")
-print(f"**Frequência Cardíaca Média (BPM Médio): {bpm_medio:.2f} BPM**")
+# -------------------------- CONSTRUÇÃO DOS GRÁFICOS TEMPORAIS E HISTOGRAMA ----------------------------
+# marca o instante exato de cada pico R detectado
+tempo_picos = picosR / fs
 
-# Exibir as métricas de variabilidade
-print("\n--- Tabela de Métricas de VFC/HRV ---")
-# Usamos .T para transpor e facilitar a leitura das métricas
-print(hrv_metrics.T)
+# vetor com quantidade de picos - 1 contendo os meios dos intervalos entre as batidas para construir o tacograma/gráfico temporal
+tempo_inst = tempo_picos[:-1] + (numpy.diff(tempo_picos) / 2) 
+
+plt.figure(figsize=(12, 4))
+plt.plot(tempo_inst, FC_instantanea, 'o-', markersize=3, label='FC Instantânea')
+plt.axhline(y=mediaBPM, color='r', linestyle='--', label=f'Média: {mediaBPM:.2f} BPM')
+plt.title('Variação da Frequência Cardíaca ao Longo do Registro (Tacograma)')
+plt.xlabel('Tempo (s)')
+plt.ylabel('Frequência Cardíaca (BPM)')
+plt.show()
+
+plt.figure(figsize=(8, 5))
+plt.hist(intervalosRR_hist, bins=50, color='skyblue', edgecolor='black')
+plt.title('Histograma da Distribuição dos Intervalos RR')
+plt.xlabel('Intervalo RR (ms)')
+plt.ylabel('Contagem (Frequência)')
+plt.show()
