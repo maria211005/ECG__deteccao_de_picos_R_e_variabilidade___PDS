@@ -2,7 +2,7 @@
 Este repositório faz parte da entrega do projeto final da matéria de Processamento Digital de Sinais no segundo semestre de 2025.
 
 # Como rodar o código?
--É necessário instalar as bibliotecas:
+- É necessário instalar as bibliotecas:
     - wfdb (que contém o banco de dados recoemndado para uso)
     - numpy (responsável por realizar operações matemáticas)
     - matplot ()
