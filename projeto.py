@@ -118,19 +118,18 @@ comparacao = compare_annotations(
     tolerancia_amostras
 )
 
-TP = comparacao.tp # True Positives (Verdadeiros Positivos)
-FN = comparacao.fn # False Negatives (Falsos Negativos - Batimentos Perdidos)
-FP = comparacao.fp # False Positives (Falsos Positivos - Ruído Detectado)
+verdadeiro_positivo = comparacao.tp
+falso_negativo = comparacao.fn
+falso_positivo = comparacao.fp
 
-# 6. Calcular as Métricas Finais
-Sensibilidade = (TP / (TP + FN)) * 100 # Se: Capacidade de encontrar os batimentos
-PPV = (TP / (TP + FP)) * 100           # PPV: Capacidade das detecções estarem corretas
+Sensibilidade = (verdadeiro_positivo / (verdadeiro_positivo + falso_negativo)) * 100
+preditivo_pos = (verdadeiro_positivo / (verdadeiro_positivo + falso_positivo)) * 100
 
 print("\n--- Métricas de Desempenho da Detecção de Picos R ---")
 print(f"Total de Batimentos de Referência: {len(picos_r_referencia)}")
-print(f"Verdadeiros Positivos (TP): {TP}")
-print(f"Falsos Negativos (FN): {FN}")
-print(f"Falsos Positivos (FP): {FP}")
+print(f"Verdadeiros Positivos (TP): {verdadeiro_positivo}")
+print(f"Falsos Negativos (FN): {falso_negativo}")
+print(f"Falsos Positivos (FP): {falso_positivo}")
 print("------------------------------------------")
 print(f"Sensibilidade (Se): {Sensibilidade:.2f} %")
-print(f"Valor Preditivo Positivo (PPV): {PPV:.2f} %")
+print(f"Valor Preditivo Positivo (PPV): {preditivo_pos:.2f} %")
