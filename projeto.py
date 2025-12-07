@@ -24,7 +24,7 @@ plt.xlabel('Tempo (s)')
 plt.ylabel('Amplitude (mV)')
 plt.xlim(0, 20)
 plt.savefig("1 - plot_inicial.png")
-plt.close
+plt.close()
 
 # -------------------------------- PRÉ PROCESSAMENTO --------------------------------------------------
 freq_baixa = 0.5
@@ -42,7 +42,7 @@ plt.xlabel('Tempo (s)')
 plt.ylabel('Amplitude (mV)')
 plt.xlim(0, 20)
 plt.savefig("2 - sinal_filtrado.png")
-plt.close
+plt.close()
 
 # ------------------------------------ DETECÇÃO DOS PICOS R -------------------------------------------
 # método de detectar os picos R foi escolhido o padrão emrich2023 
@@ -59,7 +59,7 @@ plt.xlabel('Tempo (s)')
 plt.ylabel('Amplitude (mV)')
 plt.xlim(0, 20)
 plt.savefig("3 - picos_R.png")
-plt.close
+plt.close()
 
 #----------------------- VARIABILIDADE DA FREQUENCIA CARDIACA ----------------------------
 diferencas = numpy.diff(picosR)
@@ -72,16 +72,11 @@ mediaRR = numpy.mean(intervalosRR_ms)
 desvioRR = numpy.std(intervalosRR_ms)
 mediaBPM = numpy.mean(FC_instantanea)
 
-data = numpy.array([
-    ["Frequência Cardíaca Média",f"{mediaBPM:.2f} BPM"],
-    ["Média dos Intervalos RR", f"{mediaRR:.2f} ms"],
-    ["Desvio Padrão dos Intervalos RR", f"{desvioRR:.2f} ms"]
-])
-
-fig, ax = plt.subplots()
-tabela = ax.table(cellText = data, loc = 'center', cellLoc = 'center')
-plt.title("Tabela de Resumo dos Intervalos")
-plt.show()
+print("\n-------------- Tabela 1 ------------------")
+print("\n--- Tabela de Resumo dos Intervalos RR ---")
+print(f"Frequência Cardíaca Média: {mediaBPM:.2f} BPM")
+print(f"Média dos Intervalos RR: {mediaRR:.2f} ms")
+print(f"Desvio Padrão dos Intervalos RR: {desvioRR:.2f} ms")
 
 # ----------------- CONSTRUÇÃO DOS GRÁFICOS TEMPORAIS E HISTOGRAMA -----------------------
 tempo_picos = picosR / fs
@@ -99,7 +94,7 @@ plt.xlabel('Tempo (s)')
 plt.ylabel('Frequência Cardíaca (BPM)')
 plt.xlim(0, 20)
 plt.savefig("4 - varia_freq.png")
-plt.close
+plt.close()
 
 # histograma
 plt.figure(figsize=(8, 5))
@@ -108,7 +103,7 @@ plt.title('Histograma da Distribuição dos Intervalos RR')
 plt.xlabel('Intervalo RR (ms)')
 plt.ylabel('Contagem (Frequência)')
 plt.savefig("5 - hist_intervalos.png")
-plt.close
+plt.close()
 
 # ------------------------- METRICAS DE DESEMPENHO DE DETECÇÃO ---------------------------
 anotacoes_registro = wfdb.rdann(registro_ID, 'atr', pn_dir='mitdb')
@@ -129,12 +124,12 @@ falso_positivo = comparacao.fp
 
 Sensibilidade = (verdadeiro_positivo / (verdadeiro_positivo + falso_negativo)) * 100
 preditivo_pos = (verdadeiro_positivo / (verdadeiro_positivo + falso_positivo)) * 100
-
-print("\n--- Métricas de Desempenho da Detecção de Picos R ---")
-print(f"Total de Batimentos de Referência: {len(picos_r_referencia)}")
-print(f"Verdadeiros Positivos (TP): {verdadeiro_positivo}")
-print(f"Falsos Negativos (FN): {falso_negativo}")
-print(f"Falsos Positivos (FP): {falso_positivo}")
-print("------------------------------------------")
-print(f"Sensibilidade (Se): {Sensibilidade:.2f} %")
-print(f"Valor Preditivo Positivo (PPV): {preditivo_pos:.2f} %")
+print("\n--------------------- Tabela 2 ------------------------")
+print("--- Métricas de Desempenho da Detecção de Picos R ---")
+print(f"|Total de Batimentos de Referência: {len(picos_r_referencia)}")
+print(f"|Verdadeiros Positivos (TP): {verdadeiro_positivo}")
+print(f"|Falsos Negativos (FN): {falso_negativo}")
+print(f"|Falsos Positivos (FP): {falso_positivo}")
+print("|-----------------------------------------------------")
+print(f"|Sensibilidade (Se): {Sensibilidade:.2f} %")
+print(f"|Valor Preditivo Positivo (PPV): {preditivo_pos:.2f} %")
