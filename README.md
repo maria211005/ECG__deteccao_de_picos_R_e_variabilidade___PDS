@@ -10,9 +10,12 @@ Trata-se de um algoritmo capaz de identificar picos R - deflexões mais proemine
 - com a analise dos intervalos RR é possível calcular frequencia cardíaca instantânea, BPM e variabilidade de ritmo cardiaco (HRV)
 
 # Resultados
-- sinal filtrado com sobreposição de picos R detectados
+- gráfico do sinal inicial recebido do banco de dados
+- sinal filtrado sem e com sobreposição de picos R detectados
 - tabelas com valores médios e desvio padrão dos intervalos RR
-- gráficos temporais mostrando a variação de frequencia cardiaca ao longo do registro (histograma de distribuição dos intervalos RR e métricas de desempenho de detecção)
+- gráficos temporais mostrando a variação de frequencia cardiaca ao longo do registro 
+- histograma de distribuição dos intervalos RR 
+- métricas de desempenho de detecção
 
 # Como rodar o código?
 - É necessário instalar as bibliotecas:
