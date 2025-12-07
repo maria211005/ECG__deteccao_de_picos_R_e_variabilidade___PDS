@@ -6,12 +6,9 @@ from scipy.signal import butter, filtfilt
 import neurokit2                            
 import ts2vg                                
 
-#Adicional
-#análise espectral de HRV para ilustrar o equilíbrio autonômico e discutir implicações fisiológicas
-
 # ------------------------ RECEBER AS INFORMAÇÕES DO BANCO DE DADOS ---------------------------------
 canal = 0               
-registro_ID = '121'
+registro_ID = '100'
 
 record = wfdb.rdrecord(registro_ID, pn_dir= 'mitdb')
 sinal_bruto = record.p_signal[:, canal]
@@ -72,17 +69,17 @@ mediaRR = numpy.mean(intervalosRR_ms)
 desvioRR = numpy.std(intervalosRR_ms)
 mediaBPM = numpy.mean(FC_instantanea)
 
-print("\n-------------- Tabela 1 ------------------")
-print("\n--- Tabela de Resumo dos Intervalos RR ---")
-print(f"Frequência Cardíaca Média: {mediaBPM:.2f} BPM")
-print(f"Média dos Intervalos RR: {mediaRR:.2f} ms")
-print(f"Desvio Padrão dos Intervalos RR: {desvioRR:.2f} ms")
+print("\n================== Tabela 1 =====================")
+print("||          Resumo dos Intervalos RR           ||")
+print("||                                             ||")
+print(f"|| Frequência Cardíaca Média        {mediaBPM:6.2f} BPM ||")
+print(f"|| Média dos Intervalos RR          {mediaRR:6.2f} ms  ||")
+print(f"|| Desvio Padrão dos Intervalos RR  {desvioRR:6.2f} ms  ||")
+print("=================================================")
 
 # ----------------- CONSTRUÇÃO DOS GRÁFICOS TEMPORAIS E HISTOGRAMA -----------------------
 tempo_picos = picosR / fs
 
-# vetor contendo os meios dos intervalos entre as batidas para construir o tacograma/gráfico temporal 
-# possui tamanho de picos - 1 já que vai pegar o ponto entre os intervalos
 tempo_inst = tempo_picos[:-1] + (numpy.diff(tempo_picos) / 2) 
 
 # gráfico temporal
@@ -124,12 +121,14 @@ falso_positivo = comparacao.fp
 
 Sensibilidade = (verdadeiro_positivo / (verdadeiro_positivo + falso_negativo)) * 100
 preditivo_pos = (verdadeiro_positivo / (verdadeiro_positivo + falso_positivo)) * 100
-print("\n--------------------- Tabela 2 ------------------------")
-print("--- Métricas de Desempenho da Detecção de Picos R ---")
-print(f"|Total de Batimentos de Referência: {len(picos_r_referencia)}")
-print(f"|Verdadeiros Positivos (TP): {verdadeiro_positivo}")
-print(f"|Falsos Negativos (FN): {falso_negativo}")
-print(f"|Falsos Positivos (FP): {falso_positivo}")
-print("|-----------------------------------------------------")
-print(f"|Sensibilidade (Se): {Sensibilidade:.2f} %")
-print(f"|Valor Preditivo Positivo (PPV): {preditivo_pos:.2f} %")
+print("\n==================== Tabela 2 ======================")
+print("|| Métricas de Desempenho da Detecção de Picos R  ||")
+print("||                                                ||")
+print(f"|| Total de Batimentos de Referência  {len(picos_r_referencia):4d}        ||")
+print(f"|| Verdadeiros Positivos (TP)         {verdadeiro_positivo:4d}        ||")
+print(f"|| Falsos Negativos (FN)              {falso_negativo:4d}        ||")
+print(f"|| Falsos Positivos (FP)              {falso_positivo:4d}        ||")
+print("|| ---------------------------------------------- ||")
+print(f"|| Sensibilidade (Se)                 {Sensibilidade:3.2f} %     ||")
+print(f"|| Valor Preditivo Positivo (PPV)     {preditivo_pos:3.2f} %     ||")
+print("====================================================")

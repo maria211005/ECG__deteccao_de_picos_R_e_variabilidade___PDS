@@ -2,12 +2,12 @@
 Este repositório faz parte da entrega do projeto final da matéria de Processamento Digital de Sinais no segundo semestre de 2025.
 
 # Resumo do projeto
-Trata-se de um algoritmo capaz de identificar picos R - deflexões mais proeminentes do complexo QRS, principais deflexões do eletrocardiograma - a partir de um banco de dados de registros de eletrocardiogramas, o qual foi solicitado para filtrar os sinais com o filtro passa-banda, encontrar tais picos e analisar os intervalos de um ponto R a outro, descrito como intervalo RR, podendo assim encontrar a variabilidade do ritmo cardíaco e da frequência cardíaca
+Trata-se de um algoritmo capaz de identificar picos R - deflexões mais proeminentes do complexo QRS, principais deflexões do eletrocardiograma - a partir de um banco de dados de registros de eletrocardiogramas, o qual foi solicitado para filtrar os sinais com o filtro passa-banda, encontrar tais picos e analisar os intervalos de um ponto R a outro, descrito como intervalo RR, podendo assim encontrar a frequência cardíaca instantânea e média
 
 # Processo
 - filtragem passa-banda (0,5Hz a 40Hz) para eliminar ruídos de baixa frequencia e interferência de rede elétrica (50/60Hz)
 - aplicar tecnicas para localizar as posições de picos R (nesse caso foi usada a Emrich 2023)
-- com a analise dos intervalos RR é possível calcular frequencia cardíaca instantânea, BPM e variabilidade de ritmo cardiaco (HRV)
+- com a analise dos intervalos RR é possível calcular frequencia cardíaca instantânea, BPM e média e desvio padrão dos intervalos RR
 
 # Resultados
 - gráfico do sinal inicial recebido do banco de dados
