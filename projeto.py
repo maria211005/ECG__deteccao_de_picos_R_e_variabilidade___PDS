@@ -72,11 +72,16 @@ mediaRR = numpy.mean(intervalosRR_ms)
 desvioRR = numpy.std(intervalosRR_ms)
 mediaBPM = numpy.mean(FC_instantanea)
 
+data = numpy.array([
+    ["Frequência Cardíaca Média",f"{mediaBPM:.2f} BPM"],
+    ["Média dos Intervalos RR", f"{mediaRR:.2f} ms"],
+    ["Desvio Padrão dos Intervalos RR", f"{desvioRR:.2f} ms"]
+])
 
-print("\n--- Tabela de Resumo dos Intervalos RR ---")
-print(f"Frequência Cardíaca Média: {mediaBPM:.2f} BPM")
-print(f"Média dos Intervalos RR: {mediaRR:.2f} ms")
-print(f"Desvio Padrão dos Intervalos RR: {desvioRR:.2f} ms")
+fig, ax = plt.subplots()
+tabela = ax.table(cellText = data, loc = 'center', cellLoc = 'center')
+plt.title("Tabela de Resumo dos Intervalos")
+plt.show()
 
 # ----------------- CONSTRUÇÃO DOS GRÁFICOS TEMPORAIS E HISTOGRAMA -----------------------
 tempo_picos = picosR / fs
