@@ -20,7 +20,7 @@ plt.title(f'Sinal ECG Bruto (Registro {registro_ID})')
 plt.xlabel('Tempo (s)')
 plt.ylabel('Amplitude (mV)')
 plt.xlim(0, 20)
-plt.savefig("1 - plot_inicial.png")
+plt.savefig(f"{registro_ID} - plot_inicial.png")
 plt.close()
 
 # -------------------------------- PRÉ PROCESSAMENTO --------------------------------------------------
@@ -38,7 +38,7 @@ plt.title('Sinal Filtrado (Passa-Banda)')
 plt.xlabel('Tempo (s)')
 plt.ylabel('Amplitude (mV)')
 plt.xlim(0, 20)
-plt.savefig("2 - sinal_filtrado.png")
+plt.savefig(f"{registro_ID} - sinal_filtrado.png")
 plt.close()
 
 # ------------------------------------ DETECÇÃO DOS PICOS R -------------------------------------------
@@ -55,7 +55,7 @@ plt.title('Sinal ECG Filtrado com Picos R Detectados')
 plt.xlabel('Tempo (s)')
 plt.ylabel('Amplitude (mV)')
 plt.xlim(0, 20)
-plt.savefig("3 - picos_R.png")
+plt.savefig(f"{registro_ID} - picos_R.png")
 plt.close()
 
 #----------------------- VARIABILIDADE DA FREQUENCIA CARDIACA ----------------------------
@@ -90,7 +90,7 @@ plt.title('Variação da Frequência Cardíaca ao Longo do Registro (Tacograma)'
 plt.xlabel('Tempo (s)')
 plt.ylabel('Frequência Cardíaca (BPM)')
 plt.xlim(0, 20)
-plt.savefig("4 - varia_freq.png")
+plt.savefig(f"{registro_ID} - varia_freq.png")
 plt.close()
 
 # histograma
@@ -99,7 +99,7 @@ plt.hist(intervalosRR_ms, bins=50, color='skyblue', edgecolor='black')
 plt.title('Histograma da Distribuição dos Intervalos RR')
 plt.xlabel('Intervalo RR (ms)')
 plt.ylabel('Contagem (Frequência)')
-plt.savefig("5 - hist_intervalos.png")
+plt.savefig(f"{registro_ID} - hist_intervalos.png")
 plt.close()
 
 # ------------------------- METRICAS DE DESEMPENHO DE DETECÇÃO ---------------------------
